@@ -10,6 +10,7 @@ cameraBrightness = 180
 moduleVal = 10  # SAVE EVERY iTH FRAME TO AVOID REPETITION
 minBlur = 500  # SMALLER VALUE MEANS MORE BLURRINESS PRESENT
 grayImage = False  # IMAGES SAVED COLORED OR GRAY
+
 saveData = True  # SAVE DATA FLAG
 showImage = True  # IMAGE DISPLAY FLAG
 imgWidth = 180
