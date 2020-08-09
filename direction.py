@@ -1,47 +1,24 @@
 import cv2
 import os
 import numpy as np
-video=cv2.VideoCapture(0)
-
-video.set(cv2.CAP_PROP_FRAME_WIDTH,640)
-video.set(cv2.CAP_PROP_FRAME_HEIGHT,480)
-
-
-while True:
-    _, frame = video.read()
-
-    gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
-    blur = cv2.GaussianBlur(gray,(5,5),0)
-    canny=cv2.Canny(blur,100,200)
-    
-    cv2.imshow('blur',blur)
-    _,thresh1 = cv2.threshold(blur,60,255,cv2.THRESH_BINARY)        ##흰색 검출
-    _,thresh2 = cv2.threshold(blur,90,255,cv2.THRESH_BINARY_INV)    ##검은색 검출
-
-
-    cv2.imshow('canny',thresh1)
-    # cv2.imshow('thresh2',thresh2)
-
+def direct_detection(frame,count):
+    if count>0:
+        return False
+    gray1 = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
+    blur = cv2.GaussianBlur(gray1,(5,5),0)    
+    _,thresh1 = cv2.threshold(blur,200,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)        ##흰색 검출
+    thresh2 = cv2.bitwise_not(thresh1)    ##검은색 검출
     blk,_ = cv2.findContours(thresh2,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
-    
-
-
-
     ########검은색 비율 거르기
     blkroi = []
     whcont = []
     whco=[]
-
     for i in range(len(blk)):
         con = blk[i]
         area = cv2.contourArea(con)
         x,y,w,h = cv2.boundingRect(con)
         rarea = w*h
-        
-
-        
-
-        if h/w>=0.8 and h/w<=1.2 and w<=200 and w>=30  and area/rarea>=0.5:
+        if h/w>=0.8 and h/w<=1.2 and w<=400 and w>=100  and area/rarea>=0.5:
             blkroi.append([con,x,y,w,h])
             th = thresh1[y:y+h,x:x+w]
             wh,_ = cv2.findContours(th,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
@@ -68,95 +45,13 @@ while True:
                         
                     except:
                         pass
-                    cv2.line(frame[y:y+h,x:x+w],(int(total_x),0),(int(total_x),720),(0,0,255),3)
-                    cv2.line(frame[y:y+h,x:x+w],(int((w/2)),0),(int((w/2)),720),(0,255,0),3)
-                if x+(w/2)<total_x:
-                    print('left')
+                if (w/2)<total_x:
+                    print('L')
+                    return 'L'
                 else:
-                    print('right')
-
-
-
-                
-
-
-
-
-         
-            # whco.append([wh,x,y,w,h])
-            # for i in range(len(whco)):
-            #     for j in range(len(whco[i][0])):  
-            #             try:
-                            
-            #                 con1 = whco[i][0][j]
-            #                 area1 = cv2.contourArea(con1)
-            #                 x1,y1,w1,h1 = cv2.boundingRect(con1)
-            #                 rarea1 = w1*h1
-            #                 if h1/w1>=0.8 and h1/w1<=1.2 and area1/rarea1>=0.5:
-            #                     pass
-            #                 else:
-            #                     whco[i][0].remove(whco[i][0][j])
-            #                 if len(whco[i][0])==0:
-            #                     whco.pop(whco[i])
-            #             except:
-            #                 print(f"j={j}")
-            #                 break
-
-
-
-    
-    
-    ########
-    
-    ########흰색 비율 거르기
-    # whroi = []
-
-    # for i in range(len(wh)):
-    #     con1 = wh[i]
-    #     area = cv2.contourArea(con1)
-    #     x,y,w,h = cv2.boundingRect(con1)
-    #     rarea = w*h
-
-    #     if len(blkroi)>0:
-    #         for i in range(len(blkroi)):
-    #             if y>blkroi[i][2] and y+h<(blkroi[i][2]+blkroi[i][4]) and x>blkroi[i][1] and x+w<(blkroi[i][1]+blkroi[i][3]):
-    #                 whroi.append(con1)
-    #                 print("here")
-    #                 for i in range(len(blk1)):
-    #                     c=blk1[i]
-    #                     M=cv2.moments(c)
-        
-    #                     cx=int(M['m10']/M['m00'])
-        
-    #                     b=min(whroi,key=cv2.contourArea)
-    #                     m=cv2.moments(b)
-
-    #                     bx=int(m['m10']/m['m00'])
-
-    #                     if cx>=bx:
-    #                         print('right')
-
-    #                     if cx<=bx:
-    #                         print('left')
-
-        
- 
-    # for i in range(len(blkroi)):
-    #     blk1=blkroi[i][0]
-    
-    # try:
-    #     cv2.drawContours(frame,blk1,-1,(0,0,255),3)
-    # except:
-    #     pass
-    # cv2.drawContours(frame,whroi,-1,(0,255,0),3)
-
-    # frame1 = frame.copy()
-    # cv2.line(frame,(320,100),(320,150),(255,0,0),3)
-    # print(len(blkroi))
-    cv2.imshow('frame',frame)
-    # contourditec
-    if cv2.waitKey(1)&0xFF==ord('q'):break
-    
-video.release()
-cv2.destroyAllWindows()
-
+                    print('R')
+                    return 'R'
+            else:
+                return False
+        else:pass
+    return False
