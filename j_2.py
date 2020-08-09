@@ -40,13 +40,13 @@ while(True):
         cx=int(M['m10']/M['m00'])
         cy=int(M['m01']/M['m00'])
 
-        cv2.line(dst,(cx,0),(cx,720),(255,0,0),1)
-        cv2.line(dst,(0,cy),(1280,cy),(255,0,0),1)
+        cv2.line(frame,(cx,0),(cx,720),(255,0,0),1)
+        cv2.line(frame,(0,cy),(1280,cy),(255,0,0),1)
 
-        cv2.drawContours(dst, contours1,-1,(0,255,0),1)
+        cv2.drawContours(frame, contours1,-1,(0,255,0),1)
 
         if cx<=220:
-            print('turn left')
+            print('turn right')
 
         if cx>=220 and cx<=420:
             print('o')
@@ -61,10 +61,10 @@ while(True):
         cx=int(M['m10']/M['m00'])
         cy=int(M['m01']/M['m00'])
 
-        cv2.line(dst,(cx,0),(cx,720),(255,0,0),1)
-        cv2.line(dst,(0,cy),(1280,cy),(255,0,0),1)
+        cv2.line(frame,(cx,0),(cx,720),(255,0,0),1)
+        cv2.line(frame,(0,cy),(1280,cy),(255,0,0),1)
 
-        cv2.drawContours(dst, contours1,-1,(0,255,0),1)
+        cv2.drawContours(frame, contours1,-1,(0,255,0),1)
 
         if cx<=220:
             print('turn right')
