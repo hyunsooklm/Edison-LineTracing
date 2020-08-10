@@ -1,7 +1,7 @@
 import cv2
 from tracing import *
 import direction as Direction
-import stop_detection as STOP 
+import stop-temporal as STOP 
 import numpy as np
 
 video = cv2.VideoCapture(-1)

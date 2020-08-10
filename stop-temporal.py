@@ -16,7 +16,10 @@ def stop_detection(frame,count):
         red_range = cv2.inRange(hsv, lower_red, upper_red)
         red_range = cv2.erode(red_range,None, iterations=1)
         red_range = cv2.dilate(red_range,None,iterations=1)
-        cnts,_ = cv2.findContours(red_range.copy(),cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+
+        #thresh 후 흰색에서 contour찾기 vs 붉은색에서 contour찾기
+        _,white_dst = cv2.threshold(red_range,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+        cnts,_ = cv2.findContours(white_dst.copy(),cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
         
         try:
             if len(cnts)>0: #컨투어잡고

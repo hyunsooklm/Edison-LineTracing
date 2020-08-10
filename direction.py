@@ -1,8 +1,8 @@
 import cv2
 import os
 import numpy as np
-def direct_detection(frame,count):
-    if count>0:
+def direct_detection(frame,STOP_DETECT_COUNT):
+    if STOP_DETECT_COUNT==0:
         return False
     gray1 = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
     blur = cv2.GaussianBlur(gray1,(5,5),0)    
@@ -23,7 +23,7 @@ def direct_detection(frame,count):
             th = thresh1[y:y+h,x:x+w]
             wh,_ = cv2.findContours(th,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
             #cv2.drawContours(frame[y:y+h,x:x+w],wh,-1,(0,255,0),2)
-            cv2.rectangle(frame,(x,y),(x+w,y+h),(255,0,0),2)
+            #cv2.rectangle(frame,(x,y),(x+w,y+h),(255,0,0),2)
             for i in range(len(wh)):
                 con1 = wh[i]
                 area1 = cv2.contourArea(con1)
@@ -36,13 +36,12 @@ def direct_detection(frame,count):
             if len(whco)>0:
                 total_x=0
                 for i in range(len(whco)):
-                    cv2.drawContours(frame[y:y+h,x:x+w],whco[i][0],-1,(255,255,255),2)
+                   # cv2.drawContours(frame[y:y+h,x:x+w],whco[i][0],-1,(255,255,255),2)
                     c=whco[i][0]
                     M=cv2.moments(c)
                     try:
                         cx=int(M['m10']/M['m00'])
-                        total_x+=cx
-                        
+                        total_x+=cx    
                     except:
                         pass
                 if (w/2)<total_x:
@@ -53,5 +52,5 @@ def direct_detection(frame,count):
                     return 'R'
             else:
                 return False
-        else:pass
+        else:return False
     return False

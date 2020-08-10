@@ -83,18 +83,15 @@ def straight(SPEED):
 def right(speed):
     setMotor(CH1, speed, FORWARD) 
     setMotor(CH2, speed, BACKWORD)      
-
 def left(speed):
     setMotor(CH1, speed, BACKWORD) 
     setMotor(CH2, speed, FORWARD)
-
 def back(SPEED):
     setMotor(CH1, SPEED, BACKWORD)
     setMotor(CH2, SPEED, BACKWORD)
 def stop():
     setMotor(CH1, 0, STOP)
-    setMotor(CH2, 0, STOP)
-
+    setMotor(CH2, 0, STOP)#저잠깐만 코드좀 볼께요
 def Motor_end():
     GPIO.cleanup()
     print("end")
