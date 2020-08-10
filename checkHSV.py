@@ -8,7 +8,7 @@ def empty(a):
 
 # CREATE TRACKBAR
 cv2.namedWindow("Result")
-cv2.resizeWindow("Result",frameWidth,frameHeight+100)
+#cv2.resizeWindow("Result",frameWidth,frameHeight+100)
 
 cv2.createTrackbar("min_H","Result",0,255,empty)
 cv2.createTrackbar("max_H","Result",0,255,empty)
