@@ -13,7 +13,7 @@ STOP_DETECT_COUNT=0
 while True:
     _, frame = video.read()
     D=Direction.direct_detection(frame,STOP_DETECT_COUNT)
-    stop_frame=frame[100:,:]
+    stop_frame=frame[150:,:]
     if STOP.stop_detection(stop_frame,STOP_DETECT_COUNT)==True:
         STOP_DETECT_COUNT+=1
         stop()
@@ -32,11 +32,11 @@ while True:
         gray1 = cv2.cvtColor(frame1,cv2.COLOR_BGR2GRAY)
         blur1 = cv2.GaussianBlur(gray1,(5,5),0)
         _,white_dst = cv2.threshold(blur1,240,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
-        white = white_dst[340:480,0:640]
+        white = white_dst[370:480,0:640]
         black=cv2.bitwise_not(white)
         #threshold
         #contour
-        cv2.imshow('white',white)
+#        cv2.imshow('white',white)
         contours1,hierarchy = cv2.findContours(white.copy(), 1, cv2.CHAIN_APPROX_NONE)
         contours2,_=cv2.findContours(black.copy(), 1, cv2.CHAIN_APPROX_NONE)
         if len(contours1)>0 and len(contours2)>0: #흰 검 둘다잡힐떄
@@ -47,19 +47,19 @@ while True:
                 cy=int(M['m01']/M['m00'])
                 #무게중심코드
             except ZeroDivisionError as e:
-                print("what?")
+          #      print("what?")
                 straight(100)
                 continue
-            if cx<=360:
+            if cx<=365:
                 right(100)
             else:
                 left(100)
         elif len(contours1)<=0 and len(contours2)>0: #검은색만 잡힐때
             straight(100)
         else:
-            print("what is it?")
+           # print("what is it?")
             pass
-        cv2.imshow('frame',frame)
+    #    cv2.imshow('frame',frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):break
 Motor_end()
 frame.release()

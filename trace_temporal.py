@@ -1,7 +1,7 @@
 import cv2
 from tracing import *
 import direction as Direction
-import stop-temporal as STOP 
+import stop_detection as STOP 
 import numpy as np
 
 video = cv2.VideoCapture(-1)
@@ -36,6 +36,7 @@ while True:
         black=cv2.bitwise_not(white)
         #threshold
         #contour
+        cv2.imshow('white',white)
         contours1,hierarchy = cv2.findContours(white.copy(), 1, cv2.CHAIN_APPROX_NONE)
         contours2,_=cv2.findContours(black.copy(), 1, cv2.CHAIN_APPROX_NONE)
         if len(contours1)>0 and len(contours2)>0: #흰 검 둘다잡힐떄
@@ -49,9 +50,7 @@ while True:
                 print("what?")
                 straight(100)
                 continue
-            cv2.line(frame,(cx,0),(cx,720),(0,0,255),1)
-            cv2.line(frame,(0,cy+300),(1280,cy+300),(0,0,255),1)
-            if cx<=360:
+            if cx<=355:
                 right(100)
             else:
                 left(100)

@@ -16,7 +16,6 @@ def stop_detection(frame,count):
         red_range = cv2.inRange(hsv, lower_red, upper_red)
         red_range = cv2.erode(red_range,None, iterations=1)
         red_range = cv2.dilate(red_range,None,iterations=1)
-        cv2.imshow('red_range',red_range)
         cnts,_ = cv2.findContours(red_range.copy(),cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
         
         try:
